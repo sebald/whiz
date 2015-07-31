@@ -18,9 +18,12 @@
     "gulp": "^3.9.0",
     "gulp-concat": "^2.6.0",
     "gulp-flatten": "^0.1.1",
+    "gulp-if": "^1.2.5",
+    "gulp-prompt": "^0.1.2",
     "gulp-shell": "^0.4.2",
     "gulp-sourcemaps": "^1.5.2",
     "gulp-typescript": "^2.8.0",
+    "gulp-util": "^3.0.6",
     "jspm": "^0.16.0-beta.3",
     "run-sequence": "^1.1.2",
     "source-map-loader": "^0.1.5"

@@ -1,17 +1,22 @@
 'use strcit';
 
 var gulp = require('gulp'),
-    ts = require('gulp-typescript'),
-    sourcemaps = require('gulp-sourcemaps'),
     concat = require('gulp-concat'),
     flatten = require('gulp-flatten'),
+    gif = require('gulp-if'),
+    prompt = require('gulp-prompt'),
     shell = require('gulp-shell'),
+    sourcemaps = require('gulp-sourcemaps'),
+    ts = require('gulp-typescript'),
+    util = require('gulp-util'),
 
     browserSync = require('browser-sync'),
     reload = browserSync.reload,
 
     del = require('del'),
+    fs = require('fs'),
     series = require('run-sequence'),
+    through = require('through2'),
 
 
     // Load configuration
@@ -30,6 +35,52 @@ var gulp = require('gulp'),
  * Reload browser (connected with browser sync)
  */
 gulp.task('reload', reload );
+
+
+/**
+ * Marvel Api Key
+ */
+ gulp.task('key', function ( done ) {
+
+     function createApiKey () {
+         util.log(util.colors.blue('Creating a key!'));
+         util.log(util.colors.blue(
+             'If you do not have a Marvel API, you can create ony here',
+             util.colors.underline('http://developer.marvel.com/signup'),
+             '!'
+         ));
+         return prompt.prompt({
+             type: 'input',
+             name: 'key',
+             message: 'Please enter Marvel API key',
+             validate: function ( str ) {
+                 // Marvel's API key only consists of lowecase letters and numbers.
+                 return /[0-8a-z]+/.test(str);
+             }
+        }, function ( response ) {
+            fs.writeFileSync(config.files.key, response.key)
+        });
+     }
+
+     fs.stat(config.files.key, function ( err, stat ) {
+        var exists = false;
+
+         // Check if key file exists or is empty
+         if( err ) {
+             util.log(util.colors.red('No file "' + config.files.key + '" found.'));
+             fs.writeFileSync(config.files.key, '');   // We have to create an empty file,
+                                                // otherwhise Gulp wont run the task.
+         } else if ( !stat.size ) {
+             util.log(util.colors.red('Key file is empty.'));
+         } else {
+             exists = true;
+         }
+
+         // Stark task
+         return gulp.src(config.files.key)
+            .pipe(gif(!exists, createApiKey()));
+     });
+ });
 
 
 /**
@@ -100,7 +151,7 @@ gulp.task('bundle', function () {
  */
 gulp.task('build', function ( done ) {
     series(
-        ['clean'],
+        ['clean', 'key'],
         ['tsc', 'copy'],
         done
     );

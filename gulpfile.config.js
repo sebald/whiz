@@ -11,6 +11,11 @@ function Config () {
         typings: './typings'
     };
 
+    // Files
+    config.files = {
+        key: '.marvel'
+    };
+
 
     // Vendors
     config.vendor = [
