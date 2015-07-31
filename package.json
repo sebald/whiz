@@ -1,0 +1,36 @@
+{
+  "name": "whiz",
+  "version": "0.0.1",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "postinstall": "jspm install",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Sebastian Sebald <sebastian.sebald@gmail.com> (http://www.distractedbysquirrels.com)",
+  "license": "MIT",
+  "dependencies": {
+    "angular": "^1.4.3"
+  },
+  "devDependencies": {
+    "browser-sync": "^2.8.0",
+    "del": "^1.2.0",
+    "gulp": "^3.9.0",
+    "gulp-concat": "^2.6.0",
+    "gulp-flatten": "^0.1.1",
+    "gulp-shell": "^0.4.2",
+    "gulp-sourcemaps": "^1.5.2",
+    "gulp-typescript": "^2.8.0",
+    "jspm": "^0.16.0-beta.3",
+    "run-sequence": "^1.1.2",
+    "source-map-loader": "^0.1.5"
+  },
+  "jspm": {
+    "directories": {},
+    "configFile": "jspm.config.js",
+    "dependencies": {
+      "angular": "github:angular/bower-angular@^1.4.3"
+    },
+    "devDependencies": {}
+  }
+}
