@@ -16,7 +16,6 @@ var gulp = require('gulp'),
     del = require('del'),
     fs = require('fs'),
     series = require('run-sequence'),
-    through = require('through2'),
 
 
     // Load configuration
