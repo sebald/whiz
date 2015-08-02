@@ -102,7 +102,7 @@ gulp.task('copy:key', function () {
     gulp.src([
         config.files.key
     ])
-        .pipe(rename('whiz.key.js'))
+        .pipe(rename('marvel.key.js'))
         .pipe(change(function ( contents ) {
             return [
                 'var MARVEL_API_KEY = "' + contents + '"',

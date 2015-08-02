@@ -1,5 +1,5 @@
 System.config({
-  "baseURL": "/src",
+  "baseURL": "src",
   "defaultJSExtensions": true,
   "transpiler": "none",
   "paths": {
@@ -11,7 +11,7 @@ System.config({
   "map": {
     "lib": "src/",
     "angular": "github:angular/bower-angular@1.4.3",
-    "whiz.key": "app/whiz.key"
+    "marvel.key": "app/marvel.key"
   }
 });
 
