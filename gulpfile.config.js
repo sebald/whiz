@@ -7,6 +7,7 @@ function Config () {
     config.path = {
         src: './src',
         dest: './build',
+        dest_src: './build/src',
 
         typings: './typings'
     };

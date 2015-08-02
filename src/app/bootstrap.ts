@@ -1,3 +1,4 @@
+import * as angular from 'angular';
 import WhizApp from './whiz.module';
 
 // Bootstrap

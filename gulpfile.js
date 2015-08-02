@@ -85,10 +85,23 @@ gulp.task('reload', reload );
 
 
 /**
+ * Copy all
+ */
+ gulp.task('copy', function ( done ) {
+     series(
+         ['copy:key', 'copy:vendors', 'copy:system'],
+         done
+     );
+ });
+
+
+/**
  * Copy Marvel developer key
  */
-gulp.task('copy_key', function () {
-    gulp.src(config.files.key)
+gulp.task('copy:key', function () {
+    gulp.src([
+        config.files.key
+    ])
         .pipe(rename('key.js'))
         .pipe(change(function ( contents ) {
             return 'var MARVEL_API_KEY = "' + contents + '";'
@@ -98,14 +111,25 @@ gulp.task('copy_key', function () {
 
 
 /**
- * Copy vendor and required SystemJS files
+ * Copy vendors
  */
-gulp.task('copy', function () {
+gulp.task('copy:vendors', function () {
+    gulp.src([
+        'jspm_packages/**/angular/*.js',
+        'jspm_packages/**/angular.js'
+    ])
+        .pipe(gulp.dest(config.path.dest_src + '/jspm_packages'));
+});
+
+
+/**
+ * Copy SystemJS + configuration + index.html
+ */
+gulp.task('copy:system', function () {
     gulp.src([
         config.main, // index.html
         'jspm_packages/system.js',
         'jspm.config.js',
-        'jspm_packages/**/angular.js'
     ])
         .pipe(flatten())
         .pipe(gulp.dest(config.path.dest));
@@ -127,7 +151,7 @@ gulp.task('tsc', function () {
 
     tsResult.js
         .pipe(sourcemaps.write('.'))
-        .pipe(gulp.dest(config.path.dest + '/src'));
+        .pipe(gulp.dest(config.path.dest_src));
 });
 
 
@@ -137,7 +161,7 @@ gulp.task('tsc', function () {
 gulp.task('bundle', function () {
     gulp.src(config.path.src + '/app/bootstrap.ts', { read: false})
         .pipe(shell([
-            'jspm bundle-sfx ' + config.path.dest + '/src/app/bootstrap ' +
+            'jspm bundle-sfx ' + config.path.dest_src + '/app/bootstrap ' +
                 config.path.dest + '/bundle.js'
         ]));
 });
@@ -148,7 +172,6 @@ gulp.task('bundle', function () {
  */
  gulp.task('start', ['build'], function () {
     gulp.watch(config.path.src + '/**/*.ts', ['tsc', 'reload']);
-    gulp.watch(config.main, ['copy', 'reload']);
 
     browserSync({
         server: {
@@ -167,7 +190,7 @@ gulp.task('build', function ( done ) {
     series(
         ['clean'],
         ['key'],
-        ['tsc', 'copy', 'copy_key'],
+        ['tsc', 'copy'],
         done
     );
 });
