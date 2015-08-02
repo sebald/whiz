@@ -4,7 +4,6 @@ var gulp = require('gulp'),
     change = require('gulp-change'),
     concat = require('gulp-concat'),
     flatten = require('gulp-flatten'),
-    rename = require('gulp-rename'),
     shell = require('gulp-shell'),
     sourcemaps = require('gulp-sourcemaps'),
     ts = require('gulp-typescript'),
@@ -73,7 +72,10 @@ gulp.task('reload', reload );
                  }
              }, function ( err, result ) {
                  if( result && result.key ) {
-                     fs.writeFileSync(config.files.key, result.key);
+                     fs.writeFileSync(config.files.key, [
+                        'var MARVEL_API_KEY = "' + result.key.trim() + '"',
+                        'exports.default = MARVEL_API_KEY;'
+                     ].join('\n'));
                      done();
                  }
              })
@@ -99,17 +101,8 @@ gulp.task('reload', reload );
  * Copy Marvel developer key
  */
 gulp.task('copy:key', function () {
-    gulp.src([
-        config.files.key
-    ])
-        .pipe(rename('marvel.key.js'))
-        .pipe(change(function ( contents ) {
-            return [
-                'var MARVEL_API_KEY = "' + contents + '"',
-                'exports.default = MARVEL_API_KEY;'
-            ].join('\n');
-        }))
-        .pipe(gulp.dest(config.path.dest_src + '/app'));
+    gulp.src(config.files.key)
+        .pipe(gulp.dest(config.path.dest_src));
 });
 
 

@@ -14,7 +14,7 @@ function Config () {
 
     // Files
     config.files = {
-        key: '.marvel'
+        key: 'marvel.key.js'
     };
 
 

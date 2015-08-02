@@ -10,8 +10,7 @@ System.config({
 System.config({
   "map": {
     "lib": "src/",
-    "angular": "github:angular/bower-angular@1.4.3",
-    "marvel.key": "app/marvel.key"
+    "angular": "github:angular/bower-angular@1.4.3"
   }
 });
 

@@ -1,4 +1,4 @@
 build
 node_modules
 jspm_packages
-.marvel
+marvel.key.js
