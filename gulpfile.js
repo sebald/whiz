@@ -60,6 +60,11 @@ gulp.task('reload', reload );
      finally {
          if( !exists ) {
              util.log(util.colors.green('Creating new Marvel API key!'));
+             util.log(util.colors.blue(
+                 'If you do not have a Marvel API, you can create one here:',
+                 util.colors.underline('http://developer.marvel.com/signup'),
+                 '!'
+             ));
              prompt.start();
              prompt.get({
                  properties: {
