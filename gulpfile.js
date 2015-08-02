@@ -102,11 +102,14 @@ gulp.task('copy:key', function () {
     gulp.src([
         config.files.key
     ])
-        .pipe(rename('key.js'))
+        .pipe(rename('whiz.key.js'))
         .pipe(change(function ( contents ) {
-            return 'var MARVEL_API_KEY = "' + contents + '";'
+            return [
+                'var MARVEL_API_KEY = "' + contents + '"',
+                'exports.default = MARVEL_API_KEY;'
+            ].join('\n');
         }))
-        .pipe(gulp.dest(config.path.dest));
+        .pipe(gulp.dest(config.path.dest_src + '/app'));
 });
 
 

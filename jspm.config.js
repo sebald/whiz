@@ -9,8 +9,9 @@ System.config({
 
 System.config({
   "map": {
+    "lib": "src/",
     "angular": "github:angular/bower-angular@1.4.3",
-    "lib": "src/"
+    "whiz.key": "app/whiz.key"
   }
 });
 
