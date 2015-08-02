@@ -1,10 +1,10 @@
 'use strcit';
 
 var gulp = require('gulp'),
+    change = require('gulp-change'),
     concat = require('gulp-concat'),
     flatten = require('gulp-flatten'),
-    gif = require('gulp-if'),
-    prompt = require('gulp-prompt'),
+    rename = require('gulp-rename'),
     shell = require('gulp-shell'),
     sourcemaps = require('gulp-sourcemaps'),
     ts = require('gulp-typescript'),
@@ -15,12 +15,16 @@ var gulp = require('gulp'),
 
     del = require('del'),
     fs = require('fs'),
+    prompt = require('prompt'),
     series = require('run-sequence'),
 
 
     // Load configuration
     config = require('./gulpfile.config'),
     tsconfig = require('./tsconfig.json');
+
+    prompt.message = util.colors.blue('>>');
+
 
 /**
  * Clean up destination directory
@@ -40,46 +44,57 @@ gulp.task('reload', reload );
  * Marvel Api Key
  */
  gulp.task('key', function ( done ) {
+     var contents,
+         exists;
 
-     function createApiKey () {
-         util.log(util.colors.blue('Creating a key!'));
-         util.log(util.colors.blue(
-             'If you do not have a Marvel API, you can create ony here',
-             util.colors.underline('http://developer.marvel.com/signup'),
-             '!'
-         ));
-         return prompt.prompt({
-             type: 'input',
-             name: 'key',
-             message: 'Please enter Marvel API key',
-             validate: function ( str ) {
-                 // Marvel's API key only consists of lowecase letters and numbers.
-                 return /[0-8a-z]+/.test(str);
-             }
-        }, function ( response ) {
-            fs.writeFileSync(config.files.key, response.key)
-        });
-     }
-
-     fs.stat(config.files.key, function ( err, stat ) {
-        var exists = false;
-
-         // Check if key file exists or is empty
-         if( err ) {
-             util.log(util.colors.red('No file "' + config.files.key + '" found.'));
-             fs.writeFileSync(config.files.key, '');   // We have to create an empty file,
-                                                // otherwhise Gulp wont run the task.
-         } else if ( !stat.size ) {
+     try {
+         contents = fs.readFileSync(config.files.key, 'utf-8');
+         exists = !!contents.length;
+         if( !exists ) {
              util.log(util.colors.red('Key file is empty.'));
-         } else {
-             exists = true;
          }
+     }
+     catch (e) {
+         exists = false;
+         util.log(util.colors.red('No file "' + config.files.key + '" found.'));
+     }
+     finally {
+         if( !exists ) {
+             util.log(util.colors.green('Creating new Marvel API key!'));
+             prompt.start();
+             prompt.get({
+                 properties: {
+                     key: {
+                         description: 'Please enter Marvel API key',
+                         pattern: /[0-8a-z]+/,
+                         required: true,
+                         message: 'Marvel\'s API key only consists of lowecase letters and numbers'
+                     }
+                 }
+             }, function ( err, result ) {
+                 if( result && result.key ) {
+                     fs.writeFileSync(config.files.key, result.key);
+                     done();
+                 }
+             })
+         } else {
+             done();
+         }
+     }
+});
 
-         // Stark task
-         return gulp.src(config.files.key)
-            .pipe(gif(!exists, createApiKey()));
-     });
- });
+
+/**
+ * Copy Marvel developer key
+ */
+gulp.task('copy_key', function () {
+    gulp.src(config.files.key)
+        .pipe(rename('key.js'))
+        .pipe(change(function ( contents ) {
+            return 'var MARVEL_API_KEY = "' + contents + '";'
+        }))
+        .pipe(gulp.dest(config.path.dest));
+});
 
 
 /**
@@ -150,8 +165,9 @@ gulp.task('bundle', function () {
  */
 gulp.task('build', function ( done ) {
     series(
-        ['clean', 'key'],
-        ['tsc', 'copy'],
+        ['clean'],
+        ['key'],
+        ['tsc', 'copy', 'copy_key'],
         done
     );
 });

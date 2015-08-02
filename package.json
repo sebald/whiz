@@ -7,6 +7,10 @@
     "postinstall": "jspm install",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sebald/whiz.git"
+  },
   "author": "Sebastian Sebald <sebastian.sebald@gmail.com> (http://www.distractedbysquirrels.com)",
   "license": "MIT",
   "dependencies": {
@@ -16,15 +20,16 @@
     "browser-sync": "^2.8.0",
     "del": "^1.2.0",
     "gulp": "^3.9.0",
+    "gulp-change": "^1.0.0",
     "gulp-concat": "^2.6.0",
     "gulp-flatten": "^0.1.1",
-    "gulp-if": "^1.2.5",
-    "gulp-prompt": "^0.1.2",
+    "gulp-rename": "^1.2.2",
     "gulp-shell": "^0.4.2",
     "gulp-sourcemaps": "^1.5.2",
     "gulp-typescript": "^2.8.0",
     "gulp-util": "^3.0.6",
     "jspm": "^0.16.0-beta.3",
+    "prompt": "^0.2.14",
     "run-sequence": "^1.1.2",
     "source-map-loader": "^0.1.5"
   },
