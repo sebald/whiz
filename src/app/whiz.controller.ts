@@ -1,8 +1,8 @@
+import { inject } from 'whiz.decorator';
 import MarvelApi from '../services/marvel/marvel.api';
 
+@inject('MarvelApi')
 class WhizApp {
-    public static $inject: string[] = ['MarvelApi'];
-
     public api:MarvelApi;
 
     constructor( MarvelApi:MarvelApi ) {

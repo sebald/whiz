@@ -2,7 +2,7 @@ import MARVEL_API_KEY from 'marvel.key';
 import MARVEL_CONFIG from './marvel.config';
 
 
-export class MarvelKeyInterceptor {
+export default class MarvelKeyInterceptor {
     constructor () {
         if( !MARVEL_API_KEY ) {
             console.warn(`
@@ -25,10 +25,4 @@ export class MarvelKeyInterceptor {
         }
         return config;
     }
-}
-
-
-MarvelKeyInterceptorFactory.$inject = ['$httpProvider'];
-export default function MarvelKeyInterceptorFactory ( provider:ng.IHttpProvider ) {
-    provider.interceptors.push(() => new MarvelKeyInterceptor());
 }

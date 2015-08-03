@@ -1,7 +1,8 @@
+import { inject } from 'whiz.decorator';
 import MARVEL_CONFIG from './marvel.config';
 
+@inject('$http')
 class MarvelApi {
-    public static $inject: string[] = ['$http'];
     public $http:ng.IHttpService;
 
     constructor( $http:ng.IHttpService ) {

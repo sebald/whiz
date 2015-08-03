@@ -1,8 +1,10 @@
 import * as angular from 'angular';
 import MarvelApi from './marvel.api';
-import MarvelKeyInterceptorFactory from './marvel-key.interceptor';
+import MarvelKeyInterceptor from './marvel-key.interceptor';
 
 export default angular
     .module('whiz.marvel', [])
-    .config(MarvelKeyInterceptorFactory)
+    .config(['$httpProvider', ( provider:ng.IHttpProvider ) =>  {
+        provider.interceptors.push(() => new MarvelKeyInterceptor());
+    }])
     .service('MarvelApi', MarvelApi);
