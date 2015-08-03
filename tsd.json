@@ -16,6 +16,9 @@
     },
     "node/node.d.ts": {
       "commit": "383a3bc8e654a77eb8bd07d9feb7208735dcb6fa"
+    },
+    "core-js/core-js.d.ts": {
+      "commit": "287cb2e1b112bdef6de8de0dd64836583b0c49ea"
     }
   }
 }
