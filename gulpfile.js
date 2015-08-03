@@ -4,7 +4,7 @@ var gulp = require('gulp'),
     change = require('gulp-change'),
     concat = require('gulp-concat'),
     flatten = require('gulp-flatten'),
-    shell = require('gulp-shell'),
+    run = require('gulp-run'),
     sourcemaps = require('gulp-sourcemaps'),
     ts = require('gulp-typescript'),
     util = require('gulp-util'),
@@ -28,7 +28,7 @@ var gulp = require('gulp'),
 /**
  * Clean up destination directory
  */
- gulp.task('clean', function (done) {
+ gulp.task('clean', function ( done ) {
     del([config.path.dest], done);
 });
 
@@ -159,12 +159,31 @@ gulp.task('tsc', function () {
 /**
  * Bundle everthing!
  */
-gulp.task('bundle', function () {
-    gulp.src(config.path.src + '/app/bootstrap.ts', { read: false})
-        .pipe(shell([
-            'jspm bundle-sfx ' + config.path.dest_src + '/app/bootstrap ' +
-                config.path.dest + '/bundle.js'
-        ]));
+gulp.task('bundle', function ( done ) {
+    series(
+        ['bundle:tmp'],
+        ['bundle:sfx'],
+        ['bundle:clean'],
+        done
+    );
+});
+gulp.task('bundle:tmp', function () {
+    gulp.src([
+        config.path.dest + '/**/whiz.decorator.js'
+    ])
+        .pipe(flatten())
+        .pipe(gulp.dest('.'))
+});
+gulp.task('bundle:sfx', function (done) {
+    run(
+        'jspm bundle-sfx ' + config.path.dest_src + '/app/bootstrap ' +
+        config.path.dest + '/bundle.js'
+    ).exec(done);
+});
+gulp.task('bundle:clean', function ( done ) {
+    del([
+        'whiz.decorator.js'
+    ], done);
 });
 
 
