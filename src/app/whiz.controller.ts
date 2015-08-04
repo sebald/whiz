@@ -1,4 +1,4 @@
-import { inject } from 'whiz.decorator';
+import { inject } from '../utils/decorator';
 import MarvelApi from '../services/marvel/marvel.api';
 
 @inject('MarvelApi')
