@@ -160,32 +160,11 @@ gulp.task('tsc', function () {
  * Bundle everthing!
  */
 gulp.task('bundle', function ( done ) {
-    series(
-        ['bundle:tmp'],
-        ['bundle:sfx'],
-        ['bundle:clean'],
-        done
-    );
-});
-gulp.task('bundle:tmp', function () {
-    gulp.src([
-        config.path.dest + '/**/whiz.decorator.js'
-    ])
-        .pipe(flatten())
-        .pipe(gulp.dest('.'))
-});
-gulp.task('bundle:sfx', function (done) {
     run(
-        'jspm bundle-sfx ' + config.path.dest_src + '/app/bootstrap ' +
+        'jspm bundle-sfx ' + config.path.dest_src + '/bootstrap ' +
         config.path.dest + '/bundle.js'
     ).exec(done);
 });
-gulp.task('bundle:clean', function ( done ) {
-    del([
-        'whiz.decorator.js'
-    ], done);
-});
-
 
 /**
  * Start developing (server + livereload)
